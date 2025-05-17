@@ -13,11 +13,13 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class DashboardController {
 
     private int accountNo;
+    private double actual_balance;
 
     @FXML
     Label depositmsg;
@@ -81,6 +83,22 @@ public class DashboardController {
             err.printStackTrace();
         }
     }
+    public void changeToTransaction(ActionEvent e) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/transaction.fxml"));
+            Parent root = loader.load();
+
+            TransactionController withdrawController = loader.getController();
+            withdrawController.setDetail(accountNo);
+
+            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception err) {
+            err.printStackTrace();
+        }
+    }
 
     public void logout(ActionEvent e) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -96,6 +114,19 @@ public class DashboardController {
     }
 
     public void CheckBalance(ActionEvent e){
-        
+        String getBalance = "Select balance from Accounts WHERE account_no = ?";
+        try (PreparedStatement stmt = Main.connection.prepareStatement(getBalance)) {
+            stmt.setInt(1, accountNo);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                actual_balance = rs.getDouble("balance");
+            } 
+        } catch (Exception err) {
+            err.printStackTrace();
+        }
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setHeaderText("Your Balance : Rs "+actual_balance);
+        alert.setTitle("Balance detail");
+        alert.showAndWait();
     }
 }
