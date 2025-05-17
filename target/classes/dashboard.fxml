@@ -107,12 +107,12 @@
                   <Image url="@icons/detail.png" />
                </image>
             </ImageView>
-            <Hyperlink alignment="BOTTOM_CENTER" focusTraversable="false" layoutX="13.0" layoutY="90.0" onAction="#changeToDeposit" prefHeight="40.0" prefWidth="98.0" text="Detail" textFill="#050505">
+            <Hyperlink alignment="BOTTOM_CENTER" focusTraversable="false" layoutX="13.0" layoutY="90.0" onAction="#CheckDetail" prefHeight="40.0" prefWidth="98.0" text="Detail" textFill="#050505">
                <font>
                   <Font size="22.0" />
                </font>
             </Hyperlink>
-            <Button alignment="BOTTOM_CENTER" layoutY="2.0" mnemonicParsing="false" onAction="#changeToDeposit" opacity="0.0" prefHeight="96.0" prefWidth="122.0">
+            <Button alignment="BOTTOM_CENTER" layoutY="2.0" mnemonicParsing="false" onAction="#CheckDetail" opacity="0.0" prefHeight="96.0" prefWidth="122.0">
                <font>
                   <Font size="22.0" />
                </font>

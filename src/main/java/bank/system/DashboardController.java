@@ -20,6 +20,9 @@ public class DashboardController {
 
     private int accountNo;
     private double actual_balance;
+            private String Yourname;
+        private String accountNumber;
+        private String dateOfBirth;
 
     @FXML
     Label depositmsg;
@@ -127,6 +130,25 @@ public class DashboardController {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setHeaderText("Your Balance : Rs "+actual_balance);
         alert.setTitle("Balance detail");
+        alert.showAndWait();
+    }
+    public void CheckDetail(ActionEvent e){
+        String getDetail = "Select * from Accounts WHERE account_no = ?";
+        try (PreparedStatement stmt = Main.connection.prepareStatement(getDetail)) {
+            stmt.setInt(1, accountNo);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                actual_balance = rs.getDouble("balance");
+                Yourname=rs.getString("name");
+                accountNumber=String.valueOf(rs.getInt("account_no"));
+                dateOfBirth=rs.getString("dob");
+            } 
+        } catch (Exception err) {
+            err.printStackTrace();
+        }
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setHeaderText("Your Name : "+Yourname+"\nDate of birth : "+dateOfBirth+"\nAccount Number : "+accountNumber+"\nBank Balance : "+actual_balance);
+        alert.setTitle("Account detail");
         alert.showAndWait();
     }
 }
