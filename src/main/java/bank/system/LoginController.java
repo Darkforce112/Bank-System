@@ -2,7 +2,8 @@ package bank.system;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
-
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -69,7 +70,7 @@ public class LoginController {
             int Acc_no = Integer.parseInt(username_acc.getText());
             String Password = password.getText();
             stmt.setInt(1, Acc_no);
-            stmt.setString(2, Password);
+            stmt.setString(2, hashPassword(Password));
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -201,7 +202,7 @@ public class LoginController {
         try (PreparedStatement stmt = Main.connection.prepareStatement(sql)) {
             stmt.setString(1, Acc_name);
             stmt.setString(2, dob);
-            stmt.setString(3, Passwd);
+            stmt.setString(3, hashPassword(Passwd));
             stmt.executeUpdate();
 
             int accountNo = -1;
@@ -285,7 +286,7 @@ public class LoginController {
         String sql = "UPDATE Accounts set password =? WHERE account_no=? AND dob=? AND name=?";
 
         try (PreparedStatement stmt = Main.connection.prepareStatement(sql)) {
-            stmt.setString(1, new_Passwd);
+            stmt.setString(1, hashPassword(new_Passwd));
             stmt.setInt(2, changeAcc_no);
             stmt.setString(3, dob);
             stmt.setString(4, Acc_name);
@@ -297,8 +298,8 @@ public class LoginController {
                 forgetmsg.setText("Successfully Forget Password");
                 forgetmsg.setTextFill(Color.GREEN);
                 name.clear();
-                passwd.clear();
-                confirmpasswd.clear();
+                new_passwd.clear();
+                new_confirmpasswd.clear();
                 date.clear();
                 month.clear();
                 year.clear();
@@ -309,6 +310,27 @@ public class LoginController {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public static String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+            byte[] hash = md.digest(password.getBytes());
+           StringBuilder hexString = new StringBuilder();
+
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff &b);
+
+                if(hex.length()==1) hexString.append("0");
+                hexString.append(hex);
+            }
+
+           return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
     }
 

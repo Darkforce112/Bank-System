@@ -64,7 +64,7 @@ public class DepositController {
         try (PreparedStatement stmt = Main.connection.prepareStatement(sql)) {
             stmt.setDouble(1, bal);
             stmt.setInt(2, accountNo);
-            stmt.setString(3, passwd);
+            stmt.setString(3, LoginController.hashPassword(passwd));
             int rows = stmt.executeUpdate();
             if (rows > 0) {
                 depositmsg.setText("Deposit Successful");

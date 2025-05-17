@@ -64,7 +64,7 @@ public class WithdrawController {
         String getBalance = "Select balance from Accounts WHERE account_no = ? AND password = ?";
         try (PreparedStatement stmt = Main.connection.prepareStatement(getBalance)) {
             stmt.setInt(1, accountNo);
-            stmt.setString(2, passwd);
+            stmt.setString(2, LoginController.hashPassword(passwd));
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 actual_balance = rs.getDouble("balance");
