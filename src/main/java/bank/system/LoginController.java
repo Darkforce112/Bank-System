@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +25,7 @@ import javafx.stage.Stage;
 public class LoginController {
 
     @FXML
-    TextField username;
+    TextField username_acc;
 
     @FXML
     TextField password;
@@ -48,9 +50,31 @@ public class LoginController {
     TextField year;
     @FXML
     Label msg;
+    @FXML
+    Label error;
 
     public void login(ActionEvent e) {
-        System.out.println("Login");
+        String sql = "SELECT * FROM Accounts WHERE account_no = ? AND password = ?";
+        try(PreparedStatement stmt = Main.connection.prepareStatement(sql)){
+            int Acc_no =Integer.parseInt(username_acc.getText());
+            String Password =password.getText();
+            stmt.setInt(1, Acc_no);
+            stmt.setString(2, Password);
+
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                            System.out.println("Login Successful");
+            error.setText("");
+            }else{
+                error.setText("Password or Password incorrect");
+            error.setTextFill(Color.RED);
+            return; 
+            }
+        } catch (Exception err) {
+             error.setText("Password or Password incorrect");
+            error.setTextFill(Color.RED);
+            return;
+        }
 
     }
 
@@ -106,7 +130,8 @@ public class LoginController {
         String ConfirmPasswd = confirmpasswd.getText();
 
         String dob = date.getText() + "-" + month.getText() + "-" + year.getText();
-        String sql = "INSERT INTO Accounts(name, dob) VALUES(?,?)";
+
+
         if (Acc_name.isEmpty()) {
             msg.setText("Name Should not be empty");
             msg.setTextFill(Color.RED);
@@ -142,9 +167,13 @@ public class LoginController {
             msg.setTextFill(Color.RED);
             return;
         }
+
+        String sql = "INSERT INTO Accounts(name, dob,password) VALUES(?,?,?)";
+
         try (PreparedStatement stmt = Main.connection.prepareStatement(sql)) {
             stmt.setString(1, Acc_name);
             stmt.setString(2, dob);
+            stmt.setString(3, Passwd);
             stmt.executeUpdate();
             System.out.println("Account created for: " + name);
 

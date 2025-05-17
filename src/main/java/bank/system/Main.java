@@ -48,7 +48,7 @@ public class Main extends Application {
         String sql = "CREATE TABLE IF NOT EXISTS Accounts(" +
                 "account_no INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "name TEXT NOT NULL,dob TEXT,"+
-                "balance INTEGER default(0));";
+                "balance INTEGER default(0),password TEXT);";
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(sql);
             System.out.println("Table created or already exists.");
