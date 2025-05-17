@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Open FXML in Scene Builder",
+        "type": "shell",
+        "command": "C:\\Users\\hp\\AppData\\Local\\SceneBuilder\\SceneBuilder.exe",
+        "args": [
+          "${file}"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "problemMatcher": []
+      }
+    ]
+  }
+  
