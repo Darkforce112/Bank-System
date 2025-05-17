@@ -23,6 +23,8 @@ import javafx.stage.Stage;
 
 public class LoginController {
 
+    private int changeAcc_no;
+
     @FXML
     TextField username_acc;
 
@@ -48,7 +50,16 @@ public class LoginController {
     @FXML
     TextField year;
     @FXML
+    TextField new_account_number;
+    @FXML
+    TextField new_passwd;
+    @FXML
+    TextField new_confirmpasswd;
+
+    @FXML
     Label msg;
+    @FXML
+    Label forgetmsg;
     @FXML
     Label error;
 
@@ -65,18 +76,18 @@ public class LoginController {
 
                 System.out.println("Login Successful");
                 error.setText("");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
-            Parent root = loader.load();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
+                Parent root = loader.load();
 
-            DashboardController dashboardController = loader.getController();
-            dashboardController.setDetail(Acc_no);
+                DashboardController dashboardController = loader.getController();
+                dashboardController.setDetail(Acc_no);
 
-            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
+                Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.show();
 
             } else {
-                error.setText("Password or Password incorrect");
+                error.setText("Account number or Password incorrect");
                 error.setTextFill(Color.RED);
                 return;
             }
@@ -87,10 +98,6 @@ public class LoginController {
             return;
         }
 
-    }
-
-    public void forgetPassword(ActionEvent e) {
-        System.out.println("Forget Password");
     }
 
     public void changeToLogin(ActionEvent e) {
@@ -107,6 +114,17 @@ public class LoginController {
     public void changeToCreateAcc(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/createAcc.fxml"));
+            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception err) {
+            err.printStackTrace();
+        }
+    }
+
+    public void changeToForgetPassword(ActionEvent e) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/forgetPassword.fxml"));
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -200,7 +218,8 @@ public class LoginController {
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Account Detail ");
             alert.setHeaderText("Remember Your Account Detail unless You may loss! your account");
-            alert.setContentText("Name : " + Acc_name + "\nDOB : " + dob +"\nAccount Number : "+accountNo+ "\nPassword : " + Passwd);
+            alert.setContentText("Name : " + Acc_name + "\nDOB : " + dob + "\nAccount Number : " + accountNo
+                    + "\nPassword : " + Passwd);
 
             alert.getButtonTypes().setAll(ButtonType.OK);
 
@@ -210,7 +229,83 @@ public class LoginController {
             });
 
             if (alert.showAndWait().get() == ButtonType.OK) {
+                name.clear();
+                passwd.clear();
+                confirmpasswd.clear();
+                date.clear();
+                month.clear();
+                year.clear();
+
                 changeToLogin(e);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void forgetPassword(ActionEvent e) {
+        String Acc_name = name.getText();
+        String new_Passwd = new_passwd.getText();
+        String new_ConfirmPasswd = new_confirmpasswd.getText();
+
+        String dob = date.getText() + "-" + month.getText() + "-" + year.getText();
+        try {
+            changeAcc_no = Integer.parseInt(new_account_number.getText());
+        } catch (Exception err) {
+            forgetmsg.setText("Invalid Account number");
+            forgetmsg.setTextFill(Color.RED);
+            return;
+        }
+        if (Acc_name.isEmpty()) {
+            forgetmsg.setText("Name Should not be empty");
+            forgetmsg.setTextFill(Color.RED);
+            return;
+        }
+        if (new_Passwd.isEmpty()) {
+            forgetmsg.setText("Password Should not be empty");
+            forgetmsg.setTextFill(Color.RED);
+            return;
+        }
+        if (!new_Passwd.equals(new_ConfirmPasswd)) {
+            forgetmsg.setText("Password and Confirm Password not match");
+            forgetmsg.setTextFill(Color.RED);
+            return;
+        }
+        if (new_Passwd.length() < 6) {
+            forgetmsg.setText("Password need to be atleast 6 characters long");
+            forgetmsg.setTextFill(Color.RED);
+            return;
+        }
+        if (!isDob(date.getText(), month.getText(), year.getText())) {
+            forgetmsg.setText("Incorrect Date of Birth");
+            forgetmsg.setTextFill(Color.RED);
+            return;
+        }
+
+        String sql = "UPDATE Accounts set password =? WHERE account_no=? AND dob=? AND name=?";
+
+        try (PreparedStatement stmt = Main.connection.prepareStatement(sql)) {
+            stmt.setString(1, new_Passwd);
+            stmt.setInt(2, changeAcc_no);
+            stmt.setString(3, dob);
+            stmt.setString(4, Acc_name);
+
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Password Forget Successfully");
+                forgetmsg.setText("Successfully Forget Password");
+                forgetmsg.setTextFill(Color.GREEN);
+                name.clear();
+                passwd.clear();
+                confirmpasswd.clear();
+                date.clear();
+                month.clear();
+                year.clear();
+            } else {
+                System.out.println("No matching account found");
+                forgetmsg.setText("Incorrect account number, name, or date of birth");
+                forgetmsg.setTextFill(Color.RED);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

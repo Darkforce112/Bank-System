@@ -19,7 +19,7 @@
       </ImageView>
       <TextField fx:id="username_acc" focusTraversable="false" layoutX="147.0" layoutY="190.0" prefHeight="42.0" prefWidth="313.0" promptText="Account Number" />
       <TextField fx:id="password" focusTraversable="false" layoutX="147.0" layoutY="263.0" prefHeight="42.0" prefWidth="313.0" promptText="Password" />
-      <Button fx:id="forgetpassword" layoutX="297.0" layoutY="318.0" mnemonicParsing="false" onAction="#forgetPassword" opacity="0.0" prefHeight="26.0" prefWidth="162.0" text="Button">
+      <Button fx:id="forgetpassword" layoutX="297.0" layoutY="318.0" mnemonicParsing="false" onAction="#changeToForgetPassword" opacity="0.0" prefHeight="26.0" prefWidth="162.0" text="Button">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
