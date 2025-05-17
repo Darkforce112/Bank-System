@@ -11,9 +11,10 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class WithdrawController{
+public class WithdrawController {
 
     private int accountNo;
+    private double actual_balance;
 
     @FXML
     private TextField account_no;
@@ -54,12 +55,33 @@ public class WithdrawController{
             withdrawmsg.setTextFill(Color.RED);
             return;
         }
-        if(bal<0){
-                withdrawmsg.setText("Withdraw Amount Cannot be Negative");
+        if (bal < 0) {
+            withdrawmsg.setText("Withdraw Amount Cannot be Negative");
             withdrawmsg.setTextFill(Color.RED);
             return;
-            }
+        }
 
+        String getBalance = "Select balance from Accounts WHERE account_no = ? AND password = ?";
+        try (PreparedStatement stmt = Main.connection.prepareStatement(getBalance)) {
+            stmt.setInt(1, accountNo);
+            stmt.setString(2, passwd);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                actual_balance = rs.getDouble("balance");
+            } else {
+                withdrawmsg.setText("Check Account no. or Password ");
+                withdrawmsg.setTextFill(Color.RED);
+            }
+        } catch (Exception err) {
+            err.printStackTrace();
+            withdrawmsg.setText("Withdraw Error");
+            withdrawmsg.setTextFill(Color.RED);
+        }
+        if (bal > actual_balance) {
+            withdrawmsg.setText("Withdrawal amount is insufficient.\nYou only have " + actual_balance + " in your account.");
+            withdrawmsg.setTextFill(Color.RED);
+            return;
+        }
         String sql = "UPDATE Accounts SET balance = balance - ? WHERE account_no = ? AND password = ?";
         try (PreparedStatement stmt = Main.connection.prepareStatement(sql)) {
             stmt.setDouble(1, bal);

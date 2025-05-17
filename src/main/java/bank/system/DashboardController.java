@@ -65,6 +65,22 @@ public class DashboardController {
             err.printStackTrace();
         }
     }
+    public void changeToWithdraw(ActionEvent e) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/withdraw.fxml"));
+            Parent root = loader.load();
+
+            WithdrawController withdrawController = loader.getController();
+            withdrawController.setDetail(accountNo);
+
+            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception err) {
+            err.printStackTrace();
+        }
+    }
 
     public void logout(ActionEvent e) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -77,5 +93,9 @@ public class DashboardController {
             LoginController Login = new LoginController();
             Login.changeToLogin(e);
         }
+    }
+
+    public void CheckBalance(ActionEvent e){
+        
     }
 }

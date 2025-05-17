@@ -41,12 +41,12 @@
                   <Image url="@icons/withdraw.png" />
                </image>
             </ImageView>
-            <Hyperlink alignment="BOTTOM_CENTER" focusTraversable="false" layoutX="8.0" layoutY="93.0" onAction="#changeToDeposit" prefHeight="40.0" prefWidth="108.0" text="Withdraw" textFill="#050505">
+            <Hyperlink alignment="BOTTOM_CENTER" focusTraversable="false" layoutX="8.0" layoutY="93.0" onAction="#changeToWithdraw" prefHeight="40.0" prefWidth="108.0" text="Withdraw" textFill="#050505">
                <font>
                   <Font size="22.0" />
                </font>
             </Hyperlink>
-            <Button alignment="BOTTOM_CENTER" layoutX="8.0" layoutY="12.0" mnemonicParsing="false" onAction="#changeToDeposit" opacity="0.0" prefHeight="89.0" prefWidth="108.0">
+            <Button alignment="BOTTOM_CENTER" layoutX="8.0" layoutY="12.0" mnemonicParsing="false" onAction="#changeToWithdraw" opacity="0.0" prefHeight="89.0" prefWidth="108.0">
                <font>
                   <Font size="22.0" />
                </font>
