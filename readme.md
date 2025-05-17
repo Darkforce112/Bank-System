@@ -6,7 +6,7 @@ This document provides an overview of the UI screens included in this project. E
 
 Description: This is the login interface where users enter their credentials to access the application.
 
-![Login Page](Project demo/images/LoginPage.png)
+![Login Page](Project_demo_images/LoginPage.png)
 
 ---
 
@@ -14,15 +14,15 @@ Description: This is the login interface where users enter their credentials to 
 
 Description: The main dashboard that provides an overview of user activities and navigation options.
 
-![Dashboard](Project demo/images/dashboard.png)
+![Dashboard](Project_demo_images/dashboard.png)
 
 ---
 
 ## 3. Detail Page
 
-Description: Displays detailed information related to a user account.
+Description: Displays detailed information related to a s user account.
 
-![Detail Page](Project demo/images/detail.png)
+![Detail Page](Project_demo_images/detail.png)
 
 ---
 
@@ -30,7 +30,7 @@ Description: Displays detailed information related to a user account.
 
 Description: Interface for users to Transact money from one account to another.
 
-![Transaction Page](Project demo/images/transaction.png)
+![Transaction Page](Project_demo_images/transaction.png)
 
 ---
 
@@ -38,7 +38,7 @@ Description: Interface for users to Transact money from one account to another.
 
 Description: Displays the current balance available in the user's account.
 
-![Balance Page](Project demo/images/balance.png)
+![Balance Page](Project_demo_images/balance.png)
 
 ---
 
@@ -46,7 +46,7 @@ Description: Displays the current balance available in the user's account.
 
 Description: Interface for users to withdraw money from their account.
 
-![Withdraw Page](Project demo/images/withdraw.png)
+![Withdraw Page](Project_demo_images/withdraw.png)
 
 ---
 
@@ -54,4 +54,4 @@ Description: Interface for users to withdraw money from their account.
 
 Description: Interface for users to deposit money into their account.
 
-![Deposit Page](Project demo/images/deposit.png)
+![Deposit Page](Project_demo_images/deposit.png)
