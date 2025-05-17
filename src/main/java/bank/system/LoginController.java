@@ -2,15 +2,14 @@ package bank.system;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -55,23 +54,35 @@ public class LoginController {
 
     public void login(ActionEvent e) {
         String sql = "SELECT * FROM Accounts WHERE account_no = ? AND password = ?";
-        try(PreparedStatement stmt = Main.connection.prepareStatement(sql)){
-            int Acc_no =Integer.parseInt(username_acc.getText());
-            String Password =password.getText();
+        try (PreparedStatement stmt = Main.connection.prepareStatement(sql)) {
+            int Acc_no = Integer.parseInt(username_acc.getText());
+            String Password = password.getText();
             stmt.setInt(1, Acc_no);
             stmt.setString(2, Password);
 
             ResultSet rs = stmt.executeQuery();
-            if(rs.next()){
-                            System.out.println("Login Successful");
-            error.setText("");
-            }else{
+            if (rs.next()) {
+
+                System.out.println("Login Successful");
+                error.setText("");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
+            Parent root = loader.load();
+
+            DashboardController dashboardController = loader.getController();
+            dashboardController.setDetail(Acc_no);
+
+            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            } else {
                 error.setText("Password or Password incorrect");
-            error.setTextFill(Color.RED);
-            return; 
+                error.setTextFill(Color.RED);
+                return;
             }
         } catch (Exception err) {
-             error.setText("Password or Password incorrect");
+            err.printStackTrace();
+            error.setText("An error occur in login");
             error.setTextFill(Color.RED);
             return;
         }
@@ -85,7 +96,7 @@ public class LoginController {
     public void changeToLogin(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/login.fxml"));
-            Stage stage = (Stage) ((javafx.scene.Node) e.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception err) {
@@ -96,7 +107,7 @@ public class LoginController {
     public void changeToCreateAcc(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/createAcc.fxml"));
-            Stage stage = (Stage) ((javafx.scene.Node) e.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception err) {
@@ -130,7 +141,6 @@ public class LoginController {
         String ConfirmPasswd = confirmpasswd.getText();
 
         String dob = date.getText() + "-" + month.getText() + "-" + year.getText();
-
 
         if (Acc_name.isEmpty()) {
             msg.setText("Name Should not be empty");
@@ -175,6 +185,13 @@ public class LoginController {
             stmt.setString(2, dob);
             stmt.setString(3, Passwd);
             stmt.executeUpdate();
+
+            int accountNo = -1;
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                accountNo = generatedKeys.getInt(1);
+            }
+
             System.out.println("Account created for: " + name);
 
             msg.setText("Successfully created Account");
@@ -183,7 +200,7 @@ public class LoginController {
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Account Detail ");
             alert.setHeaderText("Remember Your Account Detail unless You may loss! your account");
-            alert.setContentText("Name : " + Acc_name + "\n DOB : " + dob + "\nPassword : " + Passwd);
+            alert.setContentText("Name : " + Acc_name + "\nDOB : " + dob +"\nAccount Number : "+accountNo+ "\nPassword : " + Passwd);
 
             alert.getButtonTypes().setAll(ButtonType.OK);
 
