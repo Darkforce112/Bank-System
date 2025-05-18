@@ -7,9 +7,10 @@
       "request": "launch",
       "mainClass": "bank.system.Main",
       "projectName": "BankSystem",
-      "vmArgs": "--module-path lib/javafx-sdk-23.0.2/lib --add-modules javafx.controls,javafx.fxml",
+      "vmArgs": "--module-path lib/javafx --add-modules javafx.controls,javafx.fxml",
       "classPaths": [
-        "lib/sqlite-jdbc-3.42.0.0.jar"
+        "out",
+        "lib/sqlite-jdbc-3.49.1.0.jar"
       ]
     }
   ]

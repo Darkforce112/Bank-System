@@ -78,7 +78,8 @@ public class WithdrawController {
             withdrawmsg.setTextFill(Color.RED);
         }
         if (bal > actual_balance) {
-            withdrawmsg.setText("Withdrawal amount is insufficient.\nYou only have " + actual_balance + " in your account.");
+            withdrawmsg.setText(
+                    "Withdrawal amount is insufficient.\nYou only have " + actual_balance + " in your account.");
             withdrawmsg.setTextFill(Color.RED);
             return;
         }
@@ -86,12 +87,14 @@ public class WithdrawController {
         try (PreparedStatement stmt = Main.connection.prepareStatement(sql)) {
             stmt.setDouble(1, bal);
             stmt.setInt(2, accountNo);
-            stmt.setString(3, passwd);
+            stmt.setString(3, LoginController.hashPassword(passwd));
             int rows = stmt.executeUpdate();
             if (rows > 0) {
                 withdrawmsg.setText("Withdraw Successful");
                 withdrawmsg.setTextFill(Color.GREEN);
-                changeToDashboard(e);
+                account_no.setText("");
+                withdraw_amount.setText("");
+                password.setText("");
             } else {
                 withdrawmsg.setText("Withdraw Failed: Check password");
                 withdrawmsg.setTextFill(Color.RED);
@@ -105,7 +108,7 @@ public class WithdrawController {
 
     public void changeToDashboard(ActionEvent e) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/system/dashboard.fxml"));
             Parent root = loader.load();
 
             DashboardController dashboardController = loader.getController();

@@ -39,7 +39,6 @@ public class DepositController {
             depositmsg.setTextFill(Color.RED);
             return;
         }
-
         passwd = password.getText();
         try {
             bal = Double.parseDouble(deposit_amount.getText());
@@ -54,11 +53,11 @@ public class DepositController {
             depositmsg.setTextFill(Color.RED);
             return;
         }
-        if(bal<0){
-                depositmsg.setText("Deposit Amount Cannot be Negative");
+        if (bal < 0) {
+            depositmsg.setText("Deposit Amount Cannot be Negative");
             depositmsg.setTextFill(Color.RED);
             return;
-            }
+        }
 
         String sql = "UPDATE Accounts SET balance = balance + ? WHERE account_no = ? AND password = ?";
         try (PreparedStatement stmt = Main.connection.prepareStatement(sql)) {
@@ -69,7 +68,9 @@ public class DepositController {
             if (rows > 0) {
                 depositmsg.setText("Deposit Successful");
                 depositmsg.setTextFill(Color.GREEN);
-                changeToDashboard(e);
+                account_no.setText("");
+                deposit_amount.setText("");
+                password.setText("");
             } else {
                 depositmsg.setText("Deposit Failed: Check password");
                 depositmsg.setTextFill(Color.RED);
@@ -83,7 +84,7 @@ public class DepositController {
 
     public void changeToDashboard(ActionEvent e) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/system/dashboard.fxml"));
             Parent root = loader.load();
 
             DashboardController dashboardController = loader.getController();

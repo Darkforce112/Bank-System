@@ -1,6 +1,7 @@
 {
-    "java.project.referencedLibraries": [
-      "lib/*.jar"
-    ]
-  }
-  
+  "java.project.referencedLibraries": [
+    "lib/javafx/*.jar",
+    "lib/*.jar"
+  ],
+  "java.configuration.updateBuildConfiguration": "interactive"
+}

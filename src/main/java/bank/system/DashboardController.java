@@ -55,7 +55,7 @@ public class DashboardController {
 
     public void changeToDeposit(ActionEvent e) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/deposit.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/system/deposit.fxml"));
             Parent root = loader.load();
 
             DepositController depositController = loader.getController();
@@ -71,7 +71,7 @@ public class DashboardController {
     }
     public void changeToWithdraw(ActionEvent e) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/withdraw.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/system/withdraw.fxml"));
             Parent root = loader.load();
 
             WithdrawController withdrawController = loader.getController();
@@ -87,7 +87,7 @@ public class DashboardController {
     }
     public void changeToTransaction(ActionEvent e) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/transaction.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/system/transaction.fxml"));
             Parent root = loader.load();
 
             TransactionController withdrawController = loader.getController();

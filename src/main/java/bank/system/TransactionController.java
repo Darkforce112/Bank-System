@@ -88,7 +88,8 @@ public class TransactionController {
             transactionmsg.setTextFill(Color.RED);
         }
         if (bal > actual_balance) {
-            transactionmsg.setText("Transaction amount is insufficient.\nYou only have " + actual_balance + " in your account.");
+            transactionmsg.setText(
+                    "Transaction amount is insufficient.\nYou only have " + actual_balance + " in your account.");
             transactionmsg.setTextFill(Color.RED);
             return;
         }
@@ -96,7 +97,7 @@ public class TransactionController {
         try (PreparedStatement stmt = Main.connection.prepareStatement(sql)) {
             stmt.setDouble(1, bal);
             stmt.setInt(2, accountNo);
-            stmt.setString(3, passwd);
+            stmt.setString(3, LoginController.hashPassword(passwd));
             int rows = stmt.executeUpdate();
             if (rows < 0) {
                 transactionmsg.setText("Transaction Failed: Check password");
@@ -115,7 +116,11 @@ public class TransactionController {
             if (rows > 0) {
                 transactionmsg.setText("Transaction Successful");
                 transactionmsg.setTextFill(Color.GREEN);
-                changeToDashboard(e);
+                account_no.setText("");
+                tran_acc_no.setText("");
+                transaction_amount.setText("");
+                password.setText("");
+
             } else {
                 transactionmsg.setText("Transaction Failed: Check password or Account Number");
                 transactionmsg.setTextFill(Color.RED);
@@ -129,7 +134,7 @@ public class TransactionController {
 
     public void changeToDashboard(ActionEvent e) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/system/dashboard.fxml"));
             Parent root = loader.load();
 
             DashboardController dashboardController = loader.getController();

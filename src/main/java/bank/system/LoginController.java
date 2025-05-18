@@ -65,45 +65,55 @@ public class LoginController {
     Label error;
 
     public void login(ActionEvent e) {
-        String sql = "SELECT * FROM Accounts WHERE account_no = ? AND password = ?";
-        try (PreparedStatement stmt = Main.connection.prepareStatement(sql)) {
-            int Acc_no = Integer.parseInt(username_acc.getText());
-            String Password = password.getText();
-            stmt.setInt(1, Acc_no);
-            stmt.setString(2, hashPassword(Password));
-
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-
-                System.out.println("Login Successful");
-                error.setText("");
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
-                Parent root = loader.load();
-
-                DashboardController dashboardController = loader.getController();
-                dashboardController.setDetail(Acc_no);
-
-                Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.show();
-
-            } else {
-                error.setText("Account number or Password incorrect");
-                error.setTextFill(Color.RED);
-                return;
-            }
-        } catch (Exception err) {
-            err.printStackTrace();
-            error.setText("An error occur in login");
+        String input = username_acc.getText();
+        if (input == null || input.trim().isEmpty()) {
+            error.setText("Account number cannot be empty");
             error.setTextFill(Color.RED);
             return;
         }
 
+        try {
+            int Acc_no = Integer.parseInt(input);
+            String Password = password.getText();
+
+            String sql = "SELECT * FROM Accounts WHERE account_no = ? AND password = ?";
+
+            try (PreparedStatement stmt = Main.connection.prepareStatement(sql)) {
+                stmt.setInt(1, Acc_no);
+                stmt.setString(2, hashPassword(Password));
+
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    System.out.println("Login Successful");
+                    error.setText("");
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/bank/system/dashboard.fxml"));
+                    Parent root = loader.load();
+
+                    DashboardController dashboardController = loader.getController();
+                    dashboardController.setDetail(Acc_no);
+
+                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                    stage.show();
+
+                } else {
+                    error.setText("Account number or Password incorrect");
+                    error.setTextFill(Color.RED);
+                }
+            }
+        } catch (NumberFormatException nfe) {
+            error.setText("Account number must be a valid number");
+            error.setTextFill(Color.RED);
+        } catch (Exception err) {
+            err.printStackTrace();
+            error.setText("An error occurred during login");
+            error.setTextFill(Color.RED);
+        }
     }
 
     public void changeToLogin(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/login.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/bank/system/login.fxml"));
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -114,7 +124,7 @@ public class LoginController {
 
     public void changeToCreateAcc(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/createAcc.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/bank/system/createAcc.fxml"));
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -125,7 +135,7 @@ public class LoginController {
 
     public void changeToForgetPassword(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/forgetPassword.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/bank/system/forgetPassword.fxml"));
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -303,6 +313,7 @@ public class LoginController {
                 date.clear();
                 month.clear();
                 year.clear();
+                new_account_number.clear();
             } else {
                 System.out.println("No matching account found");
                 forgetmsg.setText("Incorrect account number, name, or date of birth");
@@ -318,16 +329,17 @@ public class LoginController {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
 
             byte[] hash = md.digest(password.getBytes());
-           StringBuilder hexString = new StringBuilder();
+            StringBuilder hexString = new StringBuilder();
 
             for (byte b : hash) {
-                String hex = Integer.toHexString(0xff &b);
+                String hex = Integer.toHexString(0xff & b);
 
-                if(hex.length()==1) hexString.append("0");
+                if (hex.length() == 1)
+                    hexString.append("0");
                 hexString.append(hex);
             }
 
-           return hexString.toString();
+            return hexString.toString();
 
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);

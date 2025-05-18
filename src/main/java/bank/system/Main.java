@@ -19,15 +19,13 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/login.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/bank/system/login.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
 
             connectDB();
             createTable();
-            // insertTestRecord();
-            // queryTestRecords();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,30 +52,6 @@ public class Main extends Application {
             System.out.println("Table created or already exists.");
 
             stmt.execute("INSERT OR IGNORE INTO sqlite_sequence(name, seq) VALUES('Accounts', 250000);");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void insertTestRecord() {
-        String sql = "INSERT INTO test_table(name) VALUES('Hello SQLite')";
-        try (Statement stmt = connection.createStatement()) {
-            stmt.execute(sql);
-            System.out.println("Test record inserted.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void queryTestRecords() {
-        String sql = "SELECT * FROM test_table";
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                System.out.println("ID: " + rs.getInt("id") +
-                        ", Name: " + rs.getString("name"));
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

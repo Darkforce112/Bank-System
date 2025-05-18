@@ -1,3 +1,13 @@
+# How to Run the App
+
+## To Build and Run (First Time or Rebuild)
+Double click on `build_and_run.bat`
+
+## To Only Run (After Build)
+Double click on `run.bat`
+
+
+
 # Project Screens Overview
 
 This document provides an overview of the UI screens included in this project. Each PNG file represents a specific page or functionality of the application.
