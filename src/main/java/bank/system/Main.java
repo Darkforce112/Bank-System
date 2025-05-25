@@ -21,6 +21,7 @@ public class Main extends Application {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/bank/system/login.fxml"));
             Scene scene = new Scene(root);
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
 
