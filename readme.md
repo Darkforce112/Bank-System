@@ -1,5 +1,9 @@
 # How to Run the App
 
+### NOTE :  Make sure JDK is installed and jar is on PATH 
+### Example :
+            C:\Program Files\Java\javafx-sdk-23.0.2\bin
+
 ## To Build and Run (First Time or Rebuild)
 Double click on `build_and_run.bat`
 
