@@ -69,3 +69,5 @@ Description: Interface for users to withdraw money from their account.
 Description: Interface for users to deposit money into their account.
 
 ![Deposit Page](Project_demo_images/deposit.png)
+
+Build by Amit Sharma, Gunveer Singh , Vivek Sharma , Kuldeep Zarial.
